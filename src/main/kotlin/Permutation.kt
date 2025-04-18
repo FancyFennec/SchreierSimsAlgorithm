@@ -2,73 +2,97 @@ package org.example
 
 import java.util.*
 
-class Permutation(private val permutationString: String) {
+class Permutation {
+    
+    private val permutation: Map<Int, Int>
+    private val permutationString: String
+    private val hash: Int
 
-    companion object {
-        private val permutationRegex = Regex("""(\((?:\d+,)*\d\))+""")
+    constructor(permutationString: String) {
+        this.permutation = initialize(permutationString)
+        this.permutationString = toString(permutation)
+        this.hash = this.permutationString.hashCode()
     }
 
-    private val permutation: Map<Int, Int> = initialize()
+    constructor(permutation: Map<Int, Int>) {
+        this.permutation = permutation
+        this.permutationString = toString(permutation)
+        this.hash = this.permutationString.hashCode()
+    }
 
-    private fun initialize(): Map<Int, Int> {
-        assert(permutationRegex.matches(permutationString))
+    companion object {
+        private val permutationRegex = Regex("""(\((?:\d+,)*\d+\))*""")
+    }
+
+    private fun initialize(permutationString: String): Map<Int, Int> {
+        if(!permutationRegex.matches(permutationString)) {
+            throw RuntimeException("permutation string incorrect: $permutationString")
+        }
         val result = mutableMapOf<Int, Int>()
         permutationString
             .split("(",")(",")")
             .filter(String::isNotEmpty)
             .forEach{ part ->
                 val numbers = part.split(",")
-                if(numbers.size == 1){
-                    val first = numbers[0];
-                    result[first.toInt()] = first.toInt()
-                } else {
-                    for((i, number) in numbers.withIndex()) {
-                        result[number.toInt()] = numbers[(i + 1) % numbers.size].toInt()
-                    }
+                for((i, number) in numbers.withIndex()) {
+                    result[number.toInt()] = numbers[(i + 1) % numbers.size].toInt()
                 }
             }
         return result
     }
 
-    operator fun times(other: Permutation): Permutation {
-        val result = mutableMapOf<Int, Int>()
-        (1..permutation.size).forEach {
-            result[it] = other.permutation[permutation[it]]!!
-        }
-        return Permutation(toString(result))
+    fun permute(i: Int) : Int {
+        return permutation.getOrElse(i) { i }
     }
 
-    override fun toString(): String {
-        return toString(permutation)
+    operator fun times(other: Permutation): Permutation {
+        val keys = (permutation.keys + other.permutation.keys)
+        if (keys.isEmpty()) {
+            return Permutation("")
+        }
+        return Permutation((keys.min()..keys.max()).associateWith { other.permute(permute(it)) })
+    }
+
+    operator fun div(other: Permutation): Permutation {
+        return times(other.inv())
+    }
+
+    private fun inv(): Permutation {
+        return Permutation(permutation.keys.associateBy(::permute))
     }
 
     private fun toString(permutation: Map<Int, Int>): String {
         val builder = StringBuilder()
         val numberQueue: Queue<Int> = LinkedList()
-        (1..permutation.size).forEach {
-            numberQueue.add(it)
-        }
+        numberQueue.addAll(permutation.keys.sorted())
         while(numberQueue.isNotEmpty()) {
-            builder.append("(")
             val first = numberQueue.poll()
+            if(permute(first) == first) {
+                continue
+            }
+            builder.append("(")
             builder.append(first)
-            var current = permutation[first]
+            var current = permute(first)
             while(current != first){
                 numberQueue.remove(current)
                 builder.append(",")
                 builder.append(current)
-                current = permutation[current]
+                current = permute(current)
             }
             builder.append(")")
         }
         return builder.toString()
     }
 
+    override fun toString(): String {
+        return permutationString
+    }
+
     override fun hashCode(): Int {
-        return toString().hashCode()
+        return hash
     }
 
     override fun equals(other: Any?): Boolean {
-        return other?.let { this.toString() == it.toString() }?:false
+        return other?.let { this.hashCode() == it.hashCode() }?:false
     }
 }
