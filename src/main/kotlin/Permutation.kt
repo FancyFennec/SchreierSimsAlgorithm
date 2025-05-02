@@ -22,6 +22,7 @@ class Permutation {
 
     companion object {
         private val permutationRegex = Regex("""(\((?:\d+,)*\d+\))*""")
+        val E = Permutation("")
     }
 
     private fun initialize(permutationString: String): Map<Int, Int> {
@@ -64,7 +65,7 @@ class Permutation {
     private fun toString(permutation: Map<Int, Int>): String {
         val builder = StringBuilder()
         val numberQueue: Queue<Int> = LinkedList()
-        numberQueue.addAll(permutation.keys.sorted())
+        (permutation.keys.sorted()).forEach(numberQueue::add)
         while(numberQueue.isNotEmpty()) {
             val first = numberQueue.poll()
             if(permute(first) == first) {
