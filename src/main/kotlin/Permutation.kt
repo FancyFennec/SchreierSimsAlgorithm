@@ -3,7 +3,7 @@ package org.example
 import java.util.*
 
 class Permutation {
-    
+
     private val permutation: Map<Int, Int>
     private val permutationString: String
     private val hash: Int
@@ -24,6 +24,9 @@ class Permutation {
         private val permutationRegex = Regex("""(\((?:\d+,)*\d+\))*""")
         val E = Permutation("")
     }
+
+    val keys : List<Int>
+        get() = this.permutation.keys.filter { k -> this * k != k }
 
     private fun initialize(permutationString: String): Map<Int, Int> {
         if(!permutationRegex.matches(permutationString)) {
@@ -51,16 +54,22 @@ class Permutation {
         if (keys.isEmpty()) {
             return Permutation("")
         }
-        return Permutation((keys.min()..keys.max()).associateWith { other.permute(permute(it)) })
+        return Permutation((keys.min()..keys.max()).associateWith { this *( other * it) })
+    }
+
+    operator fun times(other: Int): Int {
+        return this.permutation.getOrElse(other) { other }
     }
 
     operator fun div(other: Permutation): Permutation {
-        return times(other.inv())
+        return times(other.inv)
     }
 
-    private fun inv(): Permutation {
-        return Permutation(permutation.keys.associateBy(::permute))
-    }
+    val inv: Permutation
+        get() { return Permutation(permutation.keys.associateBy(::permute)) }
+
+    val isIdentity: Boolean
+        get() { return toString().isBlank() }
 
     private fun toString(permutation: Map<Int, Int>): String {
         val builder = StringBuilder()
