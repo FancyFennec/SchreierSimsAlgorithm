@@ -34,10 +34,17 @@ fun main() {
 //        U * R * R / L
     )
 
-    var g = Group(mutableListOf(U, R, F))
-//    val cayleyGraph = generateCayleyGraph(generators.flatMap { g -> mutableListOf(g, g) })
+    var start = System.currentTimeMillis()
+    var g = Group(mutableListOf(U, F, R), listOf(1,2,3,4,8))
+    var current = g
+    while(current.stabilizer != null) {
+        current = current.stabilizer!!
+    }
+    var stabilizer = Group(current.stabilizerGenerators)
+    val cayleyGraph = generateCayleyGraph(g.stabilizer?.stabilizerGenerators ?: g.stabilizerGenerators)
 
     println(g.size)
+    println((System.currentTimeMillis() - start))
 //    println(cayleyGraph.size)
 
 //    drawCayleyGraph(cayleyGraph)

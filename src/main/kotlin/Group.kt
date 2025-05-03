@@ -3,14 +3,20 @@ package org.example
 import org.example.Permutation.Companion.E
 import java.util.*
 
-class Group(private val generators: List<Permutation>) {
+class Group(
+    private val generators: List<Permutation>,
+    private var points: List<Int>? = null
+)
+{
 
-    private val stabilizerPoint: Int = generators.first().keys.first()
+    private val stabilizerPoint: Int = points?.first() ?: generators.first().keys.first()
     private val orbitMap: Map<Int, Permutation>
-    private val stabilizer : Group?
+    public val stabilizerGenerators: List<Permutation>
+    public val stabilizer : Group?
 
     init {
         this.orbitMap = computeOrbitMap()
+        this.stabilizerGenerators = computeStabilizerGenerators()
         this.stabilizer = computeStabilizer()
     }
 
@@ -33,14 +39,13 @@ class Group(private val generators: List<Permutation>) {
     }
 
     private fun computeStabilizer() : Group? {
-        val fixtureGenerators = computeFixtureGenerators()
-        if(fixtureGenerators.isEmpty()) {
+        if(stabilizerGenerators.isEmpty() || points?.size == 1) {
             return null
         }
-        return Group(fixtureGenerators)
+        return Group(stabilizerGenerators, points?.minus(stabilizerPoint))
     }
 
-    private fun computeFixtureGenerators() : List<Permutation> {
+    private fun computeStabilizerGenerators() : List<Permutation> {
         return generators.flatMap { a ->
             orbitMap.values.map { u ->
                 getComplement(a * u).inv * a * u
