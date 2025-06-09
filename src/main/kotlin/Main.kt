@@ -35,15 +35,23 @@ fun main() {
     )
 
     var start = System.currentTimeMillis()
-    var g = Group(mutableListOf(U, F, R), listOf(1,2,3,4,8))
+    var g = Group(mutableListOf(U, F, R), listOf(1,2,3,4,5,6))
     var current = g
     while(current.stabilizer != null) {
         current = current.stabilizer!!
     }
     var stabilizer = Group(current.stabilizerGenerators)
-    val cayleyGraph = generateCayleyGraph(g.stabilizer?.stabilizerGenerators ?: g.stabilizerGenerators)
+//    val cayleyGraph = generateCayleyGraph(g.stabilizer?.stabilizerGenerators ?: g.stabilizerGenerators)
+    println("Stabilizer Group Size ${stabilizer.size}")
+    current.stabilizerGenerators.forEach { g ->
+        val puzzle = PermutationPuzzle(
+            mapOf(U to "U", F to "F", R to "R"),
+            g
+        )
+        println("Stabilizer $g")
+        println("Path: ${puzzle.solve()}")
+    }
 
-    println(g.size)
     println((System.currentTimeMillis() - start))
 //    println(cayleyGraph.size)
 
