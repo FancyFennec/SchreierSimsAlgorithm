@@ -1,0 +1,52 @@
+package org.example
+
+import org.example.Permutation.Companion.E
+
+class ThreeRubiksCube {
+
+    companion object {
+        val F = Permutation("(1,3,8,6)(2,5,7,4)(14,25,35,24)(15,28,34,21)(16,30,33,19)")
+        val B = Permutation("(41,43,48,46)(42,45,47,44)(38,32,11,17)(39,29,10,20)(40,27,9,22)")
+        val L = Permutation("(17,19,24,22)(18,21,23,20)(9,1,33,41)(12,4,36,44)(14,6,38,46)")
+        val R = Permutation("(25,27,32,30)(26,29,31,28)(16,48,40,8)(13,45,37,5)(11,43,35,3)")
+        val U = Permutation("(9,11,16,14)(10,13,15,12)(46,27,3,19)(47,26,2,18)(48,25,1,17)")
+        val D = Permutation("(33,35,40,38)(34,37,39,36)(6,30,43,22)(7,31,42,23)(8,32,41,24)")
+    }
+
+    private val dictionary = mapOf(
+        F to "F",
+        B to "B",
+        L to "L",
+        R to "R",
+        U to "U",
+        D to "D",
+        E to "E",
+    )
+
+    fun solve(p: Permutation): String {
+        return PermutationPuzzle(dictionary, p).solve()
+    }
+
+    fun permute(ps: String): Permutation {
+        return ps.split(',').map {
+            dictionary.entries.find { entry -> entry.value == it }?.key ?:
+            dictionary.entries.find { entry -> entry.value == it.removePrefix("-") }?.key?.inv
+        }.fold(E){a,b -> a*b!!}
+    }
+
+    val generators : List<Permutation>
+        get() = dictionary.keys.toList()
+
+    val size : Long
+        get() = SchreierSims(generators).size
+
+    fun stabilizersThatPermute(ps: List<Int>): List<Permutation> {
+        val stabilizers = generators.flatMap { it.keys }.distinct().filter { it !in ps }
+
+        var current = SchreierSims(generators, stabilizers)
+        while(current.stabilizer != null) {
+            current = current.stabilizer
+        }
+        return current.stabilizerGenerators
+    }
+}

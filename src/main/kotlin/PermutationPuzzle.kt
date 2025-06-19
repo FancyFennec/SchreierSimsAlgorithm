@@ -22,14 +22,20 @@ class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutati
                 ?: pollFromQueue(targetQueue, targetMap, startMap)
         }
         return intersection?.let { it ->
-            val pathFromStart = startMap[it]!!.let{ it.substring(0, it.length - 2) }
-            val pathFromTarget = targetMap[it]!!.let{ it.substring(0, it.length - 2) }
+            val pathFromStart = startMap[it]!!
                 .split(",")
+                .dropLast(1)
+                .joinToString(",")
+            val pathFromTarget = targetMap[it]!!
+                .split(",")
+                .dropLast(1)
                 .reversed()
                 .joinToString(",") { letter ->
                     if (letter.startsWith('-')) letter.substring(1) else "-$letter"
                 }
-            "${pathFromTarget},${pathFromStart}"
+            listOf(pathFromTarget, pathFromStart)
+                .filter(String::isNotBlank)
+                .joinToString(",")
         }?: ""
     }
 
@@ -45,8 +51,11 @@ class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutati
             map[p]?.let { path ->
                 generators.flatMap { (g, letter) -> listOf(g to letter, g.inv to "-$letter") }
                     .forEach { (g, letter) ->
-                        map[g * p] = "$letter,$path"
-                        queue.add(g * p)
+                        val newKey = g * p
+                        if(!map.containsKey(newKey)) {
+                            map[newKey] = "$letter,$path"
+                            queue.add(newKey)
+                        }
                     }
             }
         }

@@ -103,6 +103,9 @@ class Permutation {
     }
 
     override fun equals(other: Any?): Boolean {
-        return other?.let { this.hashCode() == it.hashCode() }?:false
+        if(other is Permutation) {
+            return other.let { this.permutationString == it.permutationString }
+        }
+        return false
     }
 }

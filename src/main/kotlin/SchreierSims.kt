@@ -3,16 +3,20 @@ package org.example
 import org.example.Permutation.Companion.E
 import java.util.*
 
-class Group(
+class SchreierSims(
     private val generators: List<Permutation>,
-    private var points: List<Int>? = null
+    private val points: List<Int>
 )
 {
 
-    private val stabilizerPoint: Int = points?.first() ?: generators.first().keys.first()
+    constructor (generators: List<Permutation>) :
+            this(generators, generators.flatMap { it.keys }.distinct())
+
+
+    private val stabilizerPoint: Int = points.first()
     private val orbitMap: Map<Int, Permutation>
     public val stabilizerGenerators: List<Permutation>
-    public val stabilizer : Group?
+    public val stabilizer : SchreierSims?
 
     init {
         this.orbitMap = computeOrbitMap()
@@ -27,7 +31,7 @@ class Group(
         val queue: Queue<Int> = LinkedList(listOf(stabilizerPoint))
         while(queue.isNotEmpty()) {
             val current = queue.poll()!!
-                generators.flatMap { g -> listOf(g, g.inv)}.forEach{ g ->
+            generators.flatMap { g -> listOf(g, g.inv)}.forEach{ g ->
                 val key = g * current
                 if(key !in result) {
                     result[key] = g * result.getOrElse(current) {E}
@@ -38,11 +42,11 @@ class Group(
         return result
     }
 
-    private fun computeStabilizer() : Group? {
-        if(stabilizerGenerators.isEmpty() || points?.size == 1) {
+    private fun computeStabilizer() : SchreierSims? {
+        if(stabilizerGenerators.isEmpty() || points.size == 1) {
             return null
         }
-        return Group(stabilizerGenerators, points?.minus(stabilizerPoint))
+        return SchreierSims(stabilizerGenerators, points.minus(stabilizerPoint))
     }
 
     private fun computeStabilizerGenerators() : List<Permutation> {

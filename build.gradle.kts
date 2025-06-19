@@ -16,6 +16,7 @@ dependencies {
     implementation("org.graphstream:gs-algo:2.0")
     implementation("org.graphstream:gs-ui-swing:2.0")
     testImplementation(kotlin("test"))
+    testImplementation("org.assertj:assertj-core:3.27.3")
 }
 
 application {
