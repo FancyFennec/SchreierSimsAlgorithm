@@ -5,10 +5,10 @@ import org.example.Permutation.Companion.E
 class TwoRubiksCube {
 
     companion object {
-        val U = Permutation("(1,2,4,3)(23,14,6,10)(24,13,5,9)")
-        val F = Permutation("(5,6,8,7)(3,13,18,12)(4,15,17,10)")
-        val R = Permutation("(13,14,16,15)(4,24,20,8)(2,22,18,6)")
-        val L = Permutation("(9,10,12,11)(1,5,17,21)(3,7,19,23)")
+        val U = Permutation("(5,6,8,7)(23,14,2,10)(24,13,1,9)")
+        val F = Permutation("(1,2,4,3)(7,13,18,12)(8,15,17,10)")
+        val L = Permutation("(9,10,12,11)(5,1,17,21)(7,3,19,23)")
+        val R = Permutation("(13,14,16,15)(8,24,20,4)(6,22,18,2)")
     }
 
     private val dictionary = mapOf(
