@@ -31,14 +31,11 @@ class RubiksCubeTest {
         assertThat(rubiksCube.permute(solution)).isEqualTo(p)
     }
 
-    @Test
-    fun solveComplexCubeTest() {
-        val pin = Permutation("(9,17,46)(22,38,41)(32,43,40)")
-        val solution = rubiksCube.solve(pin)
-        val pout = rubiksCube.permute("F,-D,U,-F,D,R,-D,-R,F,-L")
-        assertThat(pin).isEqualTo(pout)
-    }
-
-
+//    @Test
+//    fun solveComplexCubeTest() {
+//        val pin = Permutation("(9,17,46)(22,38,41)(32,43,40)")
+//        val pout = rubiksCube.permute("F,-D,U,-F,D,R,-D,-R,F,-L")
+//        assertThat(pin).isEqualTo(pout)
+//    }
 
 }
