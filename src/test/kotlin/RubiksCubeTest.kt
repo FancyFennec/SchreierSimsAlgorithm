@@ -6,6 +6,7 @@ import org.example.ThreeRubiksCube.Companion.R
 import org.example.ThreeRubiksCube.Companion.U
 import org.example.TwoRubiksCube
 import org.junit.jupiter.api.Test
+import java.math.BigInteger
 
 class RubiksCubeTest {
 
@@ -34,7 +35,7 @@ class RubiksCubeTest {
 
     @Test
     fun threeCubeSizeTest() {
-        assertThat(threeRubiksCube.size).isEqualTo(6358515127070752768L)
+        assertThat(threeRubiksCube.size).isEqualTo(BigInteger("43252003274489856000"))
     }
 
     @Test

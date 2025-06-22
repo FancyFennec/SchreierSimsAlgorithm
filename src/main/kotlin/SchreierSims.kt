@@ -1,6 +1,7 @@
 package org.example
 
 import org.example.Permutation.Companion.E
+import java.math.BigInteger
 import java.util.*
 
 class SchreierSims(
@@ -24,7 +25,7 @@ class SchreierSims(
         this.stabilizer = computeStabilizer()
     }
 
-    val size : Long = this.orbitMap.size * (this.stabilizer?.size ?: 1L)
+    val size : BigInteger = BigInteger.valueOf(this.orbitMap.size.toLong()).times((this.stabilizer?.size ?: BigInteger.ONE))
 
     private fun computeOrbitMap() : Map<Int, Permutation> {
         val result = mutableMapOf(stabilizerPoint to E)

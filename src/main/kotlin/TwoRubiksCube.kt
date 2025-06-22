@@ -1,6 +1,7 @@
 package org.example
 
 import org.example.Permutation.Companion.E
+import java.math.BigInteger
 
 class TwoRubiksCube {
 
@@ -33,7 +34,7 @@ class TwoRubiksCube {
     val generators : List<Permutation>
         get() = dictionary.keys.toList()
 
-    val size : Long
+    val size : BigInteger
         get() = SchreierSims(generators).size
 
     fun stabilizersThatPermute(ps: List<Int>): List<Permutation> {
