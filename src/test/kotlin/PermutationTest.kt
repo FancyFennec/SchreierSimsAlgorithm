@@ -18,7 +18,7 @@ class PermutationTest {
     @Test
     fun inversePermutationTest() {
         assertThat(Permutation("(1,9)(2,10,8)").inv.toString())
-            .isEqualTo("(1,9)(2,8,10 )")
+            .isEqualTo("(1,9)(2,8,10)")
     }
 
     @Test
