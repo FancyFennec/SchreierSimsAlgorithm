@@ -4,7 +4,7 @@ import org.graphstream.graph.implementations.SingleGraph
 import org.graphstream.ui.view.Viewer
 
 fun main() {
-    val rubiksCube = ThreeRubiksCube()
+    val rubiksCube = SimpleThreeRubiksCube()
 //    val pin = Permutation("(9,17,46)(22,38,41)(32,43,40)")
 //    val solution = rubiksCube.solve(pin)
 //    val pout = rubiksCube.permute(solution)
