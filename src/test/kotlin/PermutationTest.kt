@@ -37,4 +37,11 @@ class PermutationTest {
             { assertThat(p.permute(8)).isEqualTo(2) }
         )
     }
+
+    @Test
+    fun equalPermutationTest() {
+        val p1 = Permutation("(1,9)(2,10,8)")
+        val p2 = Permutation("(1,9)(2,10,8)")
+        assertThat(p1 == p2).isTrue()
+    }
 }

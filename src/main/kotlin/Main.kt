@@ -10,7 +10,16 @@ fun main() {
 //    val pout = rubiksCube.permute(solution)
     val stabilizers = rubiksCube.stabilizersThatPermute(
         mutableListOf(
-            3,16,25,8,35,30
+//            9,10,11,12,13,14,15,16,
+//            1,2,3,17,18,19,25,26,26,46,47,48,
+//            5,28
+
+//            3, 16, 25, 8, 30, 35
+
+            9,10,11,12,13,14,15,16,
+            1,2,3,17,18,19,25,26,27,46,47,48,
+            37,31,
+            8,30,25
         )
     )
     stabilizers.forEach { g ->

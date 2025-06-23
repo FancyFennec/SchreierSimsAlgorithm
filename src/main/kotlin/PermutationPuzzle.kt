@@ -17,9 +17,13 @@ class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutati
         startQueue.add(E)
         targetQueue.add(target)
         var intersection: Permutation? = null
+        val startTimestamp = System.currentTimeMillis()
         while (intersection == null && (startQueue.isNotEmpty() || targetQueue.isNotEmpty())) {
             intersection = pollFromQueue(startQueue, startMap, targetMap)
                 ?: pollFromQueue(targetQueue, targetMap, startMap)
+            if(System.currentTimeMillis() - startTimestamp > 100000) {
+                return ""
+            }
         }
         return intersection?.let { it ->
             val pathFromStart = startMap[it]!!
