@@ -11,13 +11,13 @@ class Permutation {
     constructor(permutationString: String) {
         this.permutation = initialize(permutationString)
         this.permutationString = createString()
-        this.hash = this.permutation.hashCode()
+        this.hash = this.permutation.contentHashCode()
     }
 
     constructor(permutation:Array<Int>) {
         this.permutation = permutation
         this.permutationString = createString()
-        this.hash = this.permutationString.hashCode()
+        this.hash = this.permutation.contentHashCode()
     }
 
     companion object {

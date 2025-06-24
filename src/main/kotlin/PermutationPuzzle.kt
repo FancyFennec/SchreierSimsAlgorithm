@@ -21,7 +21,7 @@ class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutati
         while (intersection == null && (startQueue.isNotEmpty() || targetQueue.isNotEmpty())) {
             intersection = pollFromQueue(startQueue, startMap, targetMap)
                 ?: pollFromQueue(targetQueue, targetMap, startMap)
-            if(System.currentTimeMillis() - startTimestamp > 100000) {
+            if(System.currentTimeMillis() - startTimestamp > 2000) {
                 return ""
             }
         }

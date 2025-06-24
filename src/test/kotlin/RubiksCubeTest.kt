@@ -1,6 +1,7 @@
 import org.example.ThreeRubiksCube
 
 import org.assertj.core.api.Assertions.assertThat
+import org.example.Permutation
 import org.example.ThreeRubiksCube.Companion.L
 import org.example.ThreeRubiksCube.Companion.R
 import org.example.ThreeRubiksCube.Companion.U
@@ -17,6 +18,13 @@ class RubiksCubeTest {
     fun solveSimpleCubeTest() {
         val solution = threeRubiksCube.solve(R * U * L*(R * U).inv * L)
         assertThat(solution).isEqualTo("R,U,L,-U,-R,L")
+    }
+
+    @Test
+    fun solveSimpleCubeCommutatorTest() {
+        val p = Permutation("(3,8,16,30,25,35)(5,13,10)(9,27,46,48,17,11)(26,47,28)")
+        val solution = threeRubiksCube.solve(p)
+        assertThat(solution).isEqualTo("-U,-R,U,R")
     }
 
     @Test
