@@ -17,15 +17,22 @@ class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutati
         startQueue.add(E)
         targetQueue.add(target)
         var intersection: Permutation? = null
-        val startTimestamp = System.currentTimeMillis()
-        while (intersection == null && (startQueue.isNotEmpty() || targetQueue.isNotEmpty())) {
-            intersection = pollFromQueue(startQueue, startMap, targetMap)
-                ?: pollFromQueue(targetQueue, targetMap, startMap)
-            if(System.currentTimeMillis() - startTimestamp > 2000) {
-                return ""
+        while (startQueue.isNotEmpty() || targetQueue.isNotEmpty()) {
+            val firstResult = pollFromQueue(startQueue, startMap, targetMap)
+            if(firstResult.status == PollStatus.FOUND) {
+                intersection = firstResult.intersection
+                break
+            }
+            val secondResult = pollFromQueue(targetQueue, targetMap, startMap)
+            if(secondResult.status == PollStatus.FOUND) {
+                intersection = secondResult.intersection
+                break
+            }
+            if(firstResult.status == PollStatus.CANCELLED || secondResult.status == PollStatus.CANCELLED) {
+                break
             }
         }
-        return intersection?.let { it ->
+        return intersection?.let {
             val pathFromStart = startMap[it]!!
                 .split(",")
                 .dropLast(1)
@@ -47,10 +54,13 @@ class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutati
         queue: LinkedList<Permutation>,
         map: MutableMap<Permutation, String>,
         otherMap: Map<Permutation, String>
-    ): Permutation? {
+    ): PollResult {
         queue.poll()?.let { p ->
             if (p in otherMap) {
-                return p
+                return PollResult(PollStatus.FOUND, p)
+            }
+            if(map[p]?.let{ it.split(",").size > 6} == true) {
+                return PollResult(PollStatus.CANCELLED, p)
             }
             map[p]?.let { path ->
                 generators.flatMap { (g, letter) -> listOf(g to letter, g.inv to "-$letter") }
@@ -63,6 +73,14 @@ class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutati
                     }
             }
         }
-        return null
+        return PollResult(PollStatus.NOT_FOUND, null)
+    }
+
+    class PollResult(val status: PollStatus, val intersection: Permutation?) {}
+
+    enum class PollStatus {
+        FOUND,
+        NOT_FOUND,
+        CANCELLED
     }
 }
