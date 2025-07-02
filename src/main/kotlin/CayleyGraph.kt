@@ -19,12 +19,10 @@ class CayleyGraph {
         queue.addAll(generators)
         while (queue.isNotEmpty()) {
             val current = queue.poll()
-            if(!graph.containsKey(current)) {
-                val targets = generators.map { current * it }
-                    .toHashSet()
-                graph[current] = targets
-                queue.addAll(targets)
-            }
+            val targets = generators.map { current * it }
+                .toHashSet()
+            graph[current] = targets
+            queue.addAll(targets.filter { !queue.contains(it) })
         }
         return graph
     }
