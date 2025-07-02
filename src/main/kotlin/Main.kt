@@ -1,9 +1,8 @@
 package org.example
 
 fun main(args: Array<String>) {
-    assert(args.size == 3)
-    if(args.size < 3) {
-        throw IllegalArgumentException("Three arguments expected, but was: ${args.size}")
+    if(args.size < 2) {
+        throw IllegalArgumentException("At least two arguments expected, but was: ${args.size}")
     }
 
     println("Using Generators: ${args[0]}")
@@ -25,7 +24,7 @@ fun main(args: Array<String>) {
     println("Computing subgroup size...")
     println("Subgroup size: ${SchreierSims(stabilizers).size}")
 
-    if(args[2].isBlank()) {
+    if(args.size < 3 || args[2].isBlank()) {
         println("Computing all solutions for permutations in subgroup.")
     } else {
         val map = args[2].split(";")
@@ -34,7 +33,7 @@ fun main(args: Array<String>) {
     }
     val cayleyGraph = CayleyGraph(stabilizers)
     val sortedPermutations = cayleyGraph.graph.keys.let { permutations ->
-        if(args[2].isBlank()) {
+        if(args.size < 3 || args[2].isBlank()) {
             permutations
         } else {
             permutations.filter {
@@ -47,6 +46,7 @@ fun main(args: Array<String>) {
         .map { rubiksCube.solve(it) }
         .filter { it.isNotEmpty() }
         .sortedBy { it.split(",").size }
+
     println("Found ${sortedSolutions.size} solutions:")
     sortedSolutions
         .forEach { g ->
