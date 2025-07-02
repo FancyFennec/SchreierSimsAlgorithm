@@ -1,13 +1,7 @@
 package org.example
 
-import org.example.Permutation.Companion.E
-import org.graphstream.graph.implementations.SingleGraph
-import org.graphstream.ui.view.Viewer
-import kotlin.math.pow
-import kotlin.math.sign
-
 fun main() {
-    val rubiksCube = ThreeRubiksCube.Builder()
+    val rubiksCube = RubiksCube.Builder()
         .withF()
         .withL()
         .withR()

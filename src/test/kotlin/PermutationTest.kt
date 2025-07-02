@@ -1,11 +1,7 @@
 import org.assertj.core.api.Assertions.assertThat
 import org.example.Permutation
-import org.example.ThreeRubiksCube.Companion.L
-import org.example.ThreeRubiksCube.Companion.R
-import org.example.ThreeRubiksCube.Companion.U
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 
 class PermutationTest {
 

@@ -1,9 +1,8 @@
 package org.example
 
 import org.example.Permutation.Companion.E
-import java.math.BigInteger
 
-class ThreeRubiksCube (val dictionary : Map<Permutation, String>) {
+class RubiksCube(override val dictionary: Map<Permutation, String>) : Group {
 
     companion object {
         val F = Permutation("(1,3,8,6)(2,5,7,4)(14,25,35,24)(15,28,34,21)(16,30,33,19)")
@@ -23,33 +22,6 @@ class ThreeRubiksCube (val dictionary : Map<Permutation, String>) {
     D to "D",
     E to "E",
     ))
-
-    fun solve(p: Permutation): String {
-        return PermutationPuzzle(dictionary, p).solve()
-    }
-
-    fun permute(ps: String): Permutation {
-        return ps.split(',').map {
-            dictionary.entries.find { entry -> entry.value == it }?.key ?:
-            dictionary.entries.find { entry -> entry.value == it.removePrefix("-") }?.key?.inv
-        }.fold(E){a,b -> a*b!!}
-    }
-
-    val generators : List<Permutation>
-        get() = dictionary.keys.toList()
-
-    val size : BigInteger
-        get() = SchreierSims(generators).size
-
-    fun stabilizersThatPermute(ps: List<Int>): List<Permutation> {
-        val stabilizers = generators.flatMap { it.keys }.distinct().filter { it !in ps }
-
-        var current = SchreierSims(generators, stabilizers)
-        while(current.stabilizer != null) {
-            current = current.stabilizer
-        }
-        return current.stabilizerGenerators
-    }
 
     class Builder {
 
@@ -85,8 +57,8 @@ class ThreeRubiksCube (val dictionary : Map<Permutation, String>) {
             return this
         }
 
-        fun build() : ThreeRubiksCube {
-            return ThreeRubiksCube(dictionary)
+        fun build() : RubiksCube {
+            return RubiksCube(dictionary)
         }
     }
 

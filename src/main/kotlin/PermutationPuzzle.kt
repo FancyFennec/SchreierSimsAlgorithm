@@ -1,7 +1,7 @@
 package org.example
 
 import org.example.Permutation.Companion.E
-import java.util.LinkedList
+import java.util.*
 
 class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutation) {
 
@@ -59,7 +59,7 @@ class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutati
             if (p in otherMap) {
                 return PollResult(PollStatus.FOUND, p)
             }
-            if(map[p]?.let{ it.split(",").size > 6} == true) {
+            if(map[p]?.let{ it.split(",").size > 8} == true) {
                 return PollResult(PollStatus.CANCELLED, p)
             }
             map[p]?.let { path ->
