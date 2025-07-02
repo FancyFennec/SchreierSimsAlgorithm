@@ -1,61 +1,56 @@
 package org.example
 
-fun main() {
+fun main(args: Array<String>) {
+    assert(args.size == 3)
+    if(args.size < 3) {
+        throw IllegalArgumentException("Three arguments expected, but was: ${args.size}")
+    }
+
+    println("Using Generators: ${args[0]}")
     val rubiksCube = RubiksCube.Builder()
-        .withF()
-        .withL()
-        .withR()
-        .withU()
+        .let { if(args[0].contains("F")) it.withF() else it }
+        .let { if(args[1].contains("B")) it.withB() else it }
+        .let { if(args[0].contains("U")) it.withU() else it }
+        .let { if(args[0].contains("D")) it.withD() else it }
+        .let { if(args[0].contains("L")) it.withL() else it }
+        .let { if(args[0].contains("R")) it.withR() else it }
         .build()
-//    val pin = Permutation("(3,8,25,35,16,30)(9,46,11)(17,27,48)")
-//    val solution = rubiksCube.solve(pin)
-    val stabilizers = rubiksCube.stabilizersThatPermute(
-        mutableListOf(
-//            9,10,11,12,13,14,15,16,
-//            1,2,3,17,18,19,25,26,27,46,47,48,
+    println("Computing group size...")
+    println("Group size: ${SchreierSims(rubiksCube.generators).size}")
 
-            19,14,1,
-            11,27,48,
-            9,17,46
+    println("Computing subgroup that permute: ${args[1]}")
+    val stabilizers = args[1].split(",")
+        .map { it.toInt() }
+        .let(rubiksCube::stabilizersThatPermute)
+    println("Computing subgroup size...")
+    println("Subgroup size: ${SchreierSims(stabilizers).size}")
 
-//            5,28
-
-//            3, 16, 25, 8, 30, 35
-
-//            9,10,11,12,13,14,15,16,
-//            1,2,3,17,18,19,25,26,27,46,47,48,
-//            5,28,
-//            8,30,35
-
-//            9,17,46,
-//            10,47,
-//            11,27,48,
-//            13,26,
-//            3,16,25,
-//            5,28,
-//            8,30,35
-        )
-    )
-    println("Group size: ${SchreierSims(stabilizers).size}")
+    if(args[2].isBlank()) {
+        println("Computing all solutions for permutations in subgroup.")
+    } else {
+        val map = args[2].split(";")
+            .joinToString(", ") { p -> p }
+        println("Computing solutions that contain: $map")
+    }
     val cayleyGraph = CayleyGraph(stabilizers)
-    val sortedPermutations = cayleyGraph.graph.keys
-//        .filter {
-//            it * 2 == 15 && it * 15 == 2 &&
-//            it * 10 == 47 && it * 47 == 10
-//        }
-//        .filter {
-//            mapOf(
-//                2 to 26, 2 to 13,
-//                15 to 26, 15 to 13
-//            ).entries.any { e -> it * e.key == e.value }
-//        }
+    val sortedPermutations = cayleyGraph.graph.keys.let { permutations ->
+        if(args[2].isBlank()) {
+            permutations
+        } else {
+            permutations.filter {
+                args[2].split(";")
+                    .any{ f -> it.toString().contains(f) }
+            }
+        }
+    }
     val sortedSolutions = sortedPermutations
         .map { rubiksCube.solve(it) }
         .filter { it.isNotEmpty() }
         .sortedBy { it.split(",").size }
+    println("Found ${sortedSolutions.size} solutions:")
     sortedSolutions
         .forEach { g ->
-            println("Stabilizer ${rubiksCube.permute(g)}")
+            println("Solution ${sortedSolutions.indexOf(g) + 1}: ${rubiksCube.permute(g)}")
             println("Path: $g")
         }
 }

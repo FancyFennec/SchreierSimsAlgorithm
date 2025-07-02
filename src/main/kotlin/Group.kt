@@ -34,11 +34,6 @@ interface Group {
 
     fun stabilizersThatPermute(ps: List<Int>): List<Permutation> {
         val stabilizers = generators.flatMap { it.keys }.distinct().filter { it !in ps }
-
-        var current = SchreierSims(generators, stabilizers)
-        while(current.stabilizer != null) {
-            current = current.stabilizer!!
-        }
-        return current.stabilizerGenerators
+        return stabilizersOf(stabilizers)
     }
 }
