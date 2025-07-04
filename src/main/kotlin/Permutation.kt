@@ -2,6 +2,7 @@ package org.example
 
 import java.util.*
 
+@OptIn(ExperimentalUnsignedTypes::class)
 class Permutation {
 
     val permutation:  UByteArray
@@ -23,9 +24,8 @@ class Permutation {
         get() = this.permutation.filter { k ->  k != permutation[k.toInt()] }.map { k -> (k + 1U).toInt() }
 
     private fun initialize(permutationString: String): UByteArray {
-        if(!permutationRegex.matches(permutationString)) {
-            throw RuntimeException("permutation string incorrect: $permutationString")
-        }
+        require(permutationRegex.matches(permutationString)) {"permutation string incorrect: $permutationString"}
+
         val result = UByteArray(48) { i -> i.toUByte() }
         permutationString
             .split("(",")(",")")

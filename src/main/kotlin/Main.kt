@@ -1,9 +1,13 @@
 package org.example
 
+private val generatorsRegex = Regex("""^(?:\w,)*\w$""")
+private val facesToPermuteRegex = Regex("""^(?:\d+,)*\d+$""")
+private val cycleToFilterRegex = Regex("""^(\((?:\d+,)*\d+\),)*\((?:\d+,)*\d+\)$""")
+
 fun main(args: Array<String>) {
-    if(args.size < 2) {
-        throw IllegalArgumentException("At least two arguments expected, but was: ${args.size}")
-    }
+    require(args.size >= 2) { "At least two arguments expected, but was: ${args.size}." }
+    require(generatorsRegex.matches(args[0])) { "Generators have invalid format: $args[0]" }
+    require(facesToPermuteRegex.matches(args[1])) { "Faces to permute have invalid format: $args[1]" }
 
     println("Using Generators: ${args[0]}")
     val rubiksCube = RubiksCube.Builder()
@@ -29,13 +33,14 @@ fun main(args: Array<String>) {
     } else {
         val map = args[2].split(";")
             .joinToString(", ") { p -> p }
-        println("Computing solutions that contain: $map")
+        println("Computing solutions that contain cycle: $map")
     }
     val cayleyGraph = CayleyGraph(stabilizers)
     val sortedPermutations = cayleyGraph.graph.keys.let { permutations ->
         if(args.size < 3 || args[2].isBlank()) {
             permutations
         } else {
+            require(cycleToFilterRegex.matches(args[2])) { "Cycle to filter has invalid format." }
             permutations.filter {
                 args[2].split(";")
                     .any{ f -> it.toString().contains(f) }
