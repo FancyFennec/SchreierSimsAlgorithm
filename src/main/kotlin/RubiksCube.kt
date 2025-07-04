@@ -2,7 +2,7 @@ package org.example
 
 import org.example.Permutation.Companion.E
 
-class RubiksCube(override val dictionary: Map<Permutation, String>) : Group {
+class RubiksCube(override val dictionary: Map<Permutation, String>) : Cube {
 
     companion object {
         val F = Permutation("(1,3,8,6)(2,5,7,4)(14,25,35,24)(15,28,34,21)(16,30,33,19)")
@@ -14,13 +14,13 @@ class RubiksCube(override val dictionary: Map<Permutation, String>) : Group {
     }
 
     constructor() : this(  mapOf(
-    F to "F",
-    B to "B",
-    L to "L",
-    R to "R",
-    U to "U",
-    D to "D",
-    E to "E",
+        F to "F",
+        B to "B",
+        L to "L",
+        R to "R",
+        U to "U",
+        D to "D",
+        E to "E",
     ))
 
     class Builder {

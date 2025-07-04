@@ -9,7 +9,7 @@ import org.example.PocketCube
 import org.junit.jupiter.api.Test
 import java.math.BigInteger
 
-class RubiksGroupTest {
+class RubiksCubeTest {
 
     val rubiksCube = RubiksCube()
     val pocketCube = PocketCube()

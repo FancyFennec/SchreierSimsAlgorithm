@@ -25,6 +25,10 @@ fun main(args: Array<String>) {
     val stabilizers = args[1].split(",")
         .map { it.toInt() }
         .let(rubiksCube::stabilizersThatPermute)
+    if(stabilizers.isEmpty()) {
+        println("Unable to permute faces...")
+        return
+    }
     println("Computing subgroup size...")
     println("Subgroup size: ${SchreierSims(stabilizers).size}")
 

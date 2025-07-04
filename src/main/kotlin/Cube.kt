@@ -3,7 +3,7 @@ package org.example
 import org.example.Permutation.Companion.E
 import java.math.BigInteger
 
-interface Group {
+interface Cube {
 
     val dictionary : Map<Permutation, String>
 
