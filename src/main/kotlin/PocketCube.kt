@@ -13,51 +13,53 @@ class PocketCube(override val dictionary: Map<Permutation, String>) : Cube {
         val D = Permutation("(21,22,24,23)(19,16,6,9)(20,14,5,11)")
     }
 
-    constructor() : this(  mapOf(
-        F to "F",
-        B to "B",
-        L to "L",
-        R to "R",
-        U to "U",
-        D to "D",
-        E to "E"
-    ))
+    constructor() : this(
+        mapOf(
+            F to "F",
+            B to "B",
+            L to "L",
+            R to "R",
+            U to "U",
+            D to "D",
+            E to "E"
+        )
+    )
 
     class Builder {
 
         private val dictionary = mutableMapOf(E to "E")
 
-        fun withF() : Builder {
+        fun withF(): Builder {
             dictionary[F] = "F"
             return this
         }
 
-        fun withB() : Builder {
+        fun withB(): Builder {
             dictionary[B] = "B"
             return this
         }
 
-        fun withL() : Builder {
+        fun withL(): Builder {
             dictionary[L] = "L"
             return this
         }
 
-        fun withR() : Builder {
+        fun withR(): Builder {
             dictionary[R] = "R"
             return this
         }
 
-        fun withU() : Builder {
+        fun withU(): Builder {
             dictionary[U] = "U"
             return this
         }
 
-        fun withD() : Builder {
+        fun withD(): Builder {
             dictionary[D] = "D"
             return this
         }
 
-        fun build() : PocketCube {
+        fun build(): PocketCube {
             return PocketCube(dictionary)
         }
     }

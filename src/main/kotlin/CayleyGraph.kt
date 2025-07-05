@@ -15,14 +15,13 @@ class CayleyGraph {
 
     private fun generate(): Map<Permutation, Set<Permutation>> {
         val graph = mutableMapOf<Permutation, Set<Permutation>>()
-        val queue  = HashQueue<Permutation>()
+        val queue = HashQueue<Permutation>()
         queue.addAll(generators)
         while (queue.isNotEmpty()) {
             val current = queue.poll()
-            val targets = generators.map { current * it }
-                .toHashSet()
-            graph[current] = targets
-            queue.addAll(targets.filter { !queue.contains(it) })
+            val neighbours = generators.map { current * it }.toHashSet()
+            graph[current] = neighbours
+            queue.addAll(neighbours.filter { !queue.contains(it) })
         }
         return graph
     }

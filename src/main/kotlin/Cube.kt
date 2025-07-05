@@ -5,7 +5,7 @@ import java.math.BigInteger
 
 interface Cube {
 
-    val dictionary : Map<Permutation, String>
+    val dictionary: Map<Permutation, String>
 
     fun solve(p: Permutation): String {
         return PermutationPuzzle(dictionary, p).solve()
@@ -13,21 +13,21 @@ interface Cube {
 
     fun permute(ps: String): Permutation {
         return ps.split(',').map {
-            dictionary.entries.find { entry -> entry.value == it }?.key ?:
-            dictionary.entries.find { entry -> entry.value == it.removePrefix("-") }?.key?.inv
-        }.fold(E){ a, b -> a*b!!}
+            dictionary.entries.find { entry -> entry.value == it }?.key
+                ?: dictionary.entries.find { entry -> entry.value == it.removePrefix("-") }?.key?.inv
+        }.fold(E) { a, b -> a * b!! }
     }
 
-    val generators : List<Permutation>
+    val generators: List<Permutation>
         get() = dictionary.keys.toList()
 
-    val size : BigInteger
-        get() = SchreierSims(generators).size
+    val size: BigInteger
+        get() = SchreierSimsAlgorithm(generators).size
 
     fun stabilizersOf(stabilizers: List<Int>): List<Permutation> {
-        var current = SchreierSims(generators, stabilizers)
-        while(current.stabilizer != null) {
-            current = current.stabilizer!!
+        var current = SchreierSimsAlgorithm(generators, stabilizers)
+        while (current.child != null) {
+            current = current.child
         }
         return current.stabilizerGenerators
     }

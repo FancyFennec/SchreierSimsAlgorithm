@@ -56,7 +56,7 @@ class HashQueue<T> : Queue<T> {
     }
 
     override fun containsAll(elements: Collection<T>): Boolean {
-        return set.containsAll(elements.map{it.hashCode()}.toSet())
+        return set.containsAll(elements.map { it.hashCode() }.toSet())
     }
 
     override fun retainAll(elements: Collection<T>): Boolean {

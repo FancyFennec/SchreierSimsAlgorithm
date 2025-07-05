@@ -3,7 +3,7 @@ package org.example
 import org.example.Permutation.Companion.E
 import java.util.*
 
-class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutation) {
+class PermutationPuzzle(generators: Map<Permutation, String>, target: Permutation) {
 
     private val generators: Map<Permutation, String> = generators
     private val target: Permutation = target
@@ -12,23 +12,23 @@ class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutati
         val startMap = mutableMapOf(E to "E")
         val targetMap = mutableMapOf(target to "T")
 
-        val startQueue  = LinkedList<Permutation>()
-        val targetQueue  = LinkedList<Permutation>()
+        val startQueue = LinkedList<Permutation>()
+        val targetQueue = LinkedList<Permutation>()
         startQueue.add(E)
         targetQueue.add(target)
         var intersection: Permutation? = null
         while (startQueue.isNotEmpty() || targetQueue.isNotEmpty()) {
             val firstResult = pollFromQueue(startQueue, startMap, targetMap)
-            if(firstResult.status == PollStatus.FOUND) {
+            if (firstResult.status == PollStatus.FOUND) {
                 intersection = firstResult.intersection
                 break
             }
             val secondResult = pollFromQueue(targetQueue, targetMap, startMap)
-            if(secondResult.status == PollStatus.FOUND) {
+            if (secondResult.status == PollStatus.FOUND) {
                 intersection = secondResult.intersection
                 break
             }
-            if(firstResult.status == PollStatus.CANCELLED || secondResult.status == PollStatus.CANCELLED) {
+            if (firstResult.status == PollStatus.CANCELLED || secondResult.status == PollStatus.CANCELLED) {
                 break
             }
         }
@@ -47,7 +47,7 @@ class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutati
             listOf(pathFromTarget, pathFromStart)
                 .filter(String::isNotBlank)
                 .joinToString(",")
-        }?: ""
+        } ?: ""
     }
 
     private fun pollFromQueue(
@@ -59,14 +59,14 @@ class PermutationPuzzle(generators: Map<Permutation, String>,  target: Permutati
             if (p in otherMap) {
                 return PollResult(PollStatus.FOUND, p)
             }
-            if(map[p]?.let{ it.split(",").size > 8} == true) {
+            if (map[p]?.let { it.split(",").size > 8 } == true) {
                 return PollResult(PollStatus.CANCELLED, p)
             }
             map[p]?.let { path ->
                 generators.flatMap { (g, letter) -> listOf(g to letter, g.inv to "-$letter") }
                     .forEach { (g, letter) ->
                         val newKey = g * p
-                        if(!map.containsKey(newKey)) {
+                        if (!map.containsKey(newKey)) {
                             map[newKey] = "$letter,$path"
                             queue.add(newKey)
                         }

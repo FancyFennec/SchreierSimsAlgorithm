@@ -12,7 +12,12 @@ import java.math.BigInteger
 class RubiksCubeTest {
 
     val rubiksCube = RubiksCube()
-    val pocketCube = PocketCube()
+    val pocketCube = PocketCube.Builder()
+        .withF()
+        .withR()
+        .withL()
+        .withU()
+        .build()
 
     @Test
     fun solveSimpleCubeTest() {
@@ -42,12 +47,12 @@ class RubiksCubeTest {
     }
 
     @Test
-    fun threeCubeSizeTest() {
+    fun rubiksCubeSizeTest() {
         assertThat(rubiksCube.size).isEqualTo(BigInteger("43252003274489856000"))
     }
 
     @Test
-    fun twoCubeSizeTest() {
+    fun pocketCubeSizeTest() {
         assertThat(pocketCube.size).isEqualTo(88179840L)
     }
 

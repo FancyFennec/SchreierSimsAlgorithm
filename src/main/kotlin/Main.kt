@@ -11,28 +11,28 @@ fun main(args: Array<String>) {
 
     println("Using Generators: ${args[0]}")
     val rubiksCube = RubiksCube.Builder()
-        .let { if(args[0].contains("F")) it.withF() else it }
-        .let { if(args[1].contains("B")) it.withB() else it }
-        .let { if(args[0].contains("U")) it.withU() else it }
-        .let { if(args[0].contains("D")) it.withD() else it }
-        .let { if(args[0].contains("L")) it.withL() else it }
-        .let { if(args[0].contains("R")) it.withR() else it }
+        .let { if (args[0].contains("F")) it.withF() else it }
+        .let { if (args[1].contains("B")) it.withB() else it }
+        .let { if (args[0].contains("U")) it.withU() else it }
+        .let { if (args[0].contains("D")) it.withD() else it }
+        .let { if (args[0].contains("L")) it.withL() else it }
+        .let { if (args[0].contains("R")) it.withR() else it }
         .build()
     println("Computing group size...")
-    println("Group size: ${SchreierSims(rubiksCube.generators).size}")
+    println("Group size: ${SchreierSimsAlgorithm(rubiksCube.generators).size}")
 
     println("Computing subgroup that permute: ${args[1]}")
     val stabilizers = args[1].split(",")
         .map { it.toInt() }
         .let(rubiksCube::stabilizersThatPermute)
-    if(stabilizers.isEmpty()) {
+    if (stabilizers.isEmpty()) {
         println("Unable to permute faces...")
         return
     }
     println("Computing subgroup size...")
-    println("Subgroup size: ${SchreierSims(stabilizers).size}")
+    println("Subgroup size: ${SchreierSimsAlgorithm(stabilizers).size}")
 
-    if(args.size < 3 || args[2].isBlank()) {
+    if (args.size < 3 || args[2].isBlank()) {
         println("Computing all solutions for permutations in subgroup.")
     } else {
         val map = args[2].split(";")
@@ -41,13 +41,13 @@ fun main(args: Array<String>) {
     }
     val cayleyGraph = CayleyGraph(stabilizers)
     val sortedPermutations = cayleyGraph.graph.keys.let { permutations ->
-        if(args.size < 3 || args[2].isBlank()) {
+        if (args.size < 3 || args[2].isBlank()) {
             permutations
         } else {
             require(cycleToFilterRegex.matches(args[2])) { "Cycle to filter has invalid format." }
             permutations.filter {
                 args[2].split(";")
-                    .any{ f -> it.toString().contains(f) }
+                    .any { f -> it.toString().contains(f) }
             }
         }
     }

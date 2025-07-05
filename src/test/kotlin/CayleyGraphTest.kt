@@ -1,8 +1,6 @@
 import org.assertj.core.api.Assertions.assertThat
 import org.example.CayleyGraph
 import org.example.Permutation
-import org.example.SchreierSims
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class CayleyGraphTest {
