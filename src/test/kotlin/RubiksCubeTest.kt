@@ -12,7 +12,8 @@ import java.math.BigInteger
 class RubiksCubeTest {
 
     val rubiksCube = RubiksCube()
-    val pocketCube = PocketCube()
+    val pocketCube = PocketCube.Builder()
+        .withU().withR().withL().withF().build()
 
     @Test
     fun solveSimpleCubeTest() {
