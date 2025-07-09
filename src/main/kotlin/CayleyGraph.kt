@@ -21,12 +21,12 @@ class CayleyGraph {
             val current = queue.poll()
             val neighbours = generators.map { current * it }.toHashSet()
             graph[current] = neighbours
-            queue.addAll(neighbours.filter { !queue.contains(it) })
+            queue.addAll(neighbours)
         }
         return graph
     }
 
-    public fun draw() {
+    fun draw() {
         System.setProperty("org.graphstream.ui", "swing");
         val graph = SingleGraph("Cayley Graph")
         graph.isStrict = false

@@ -3,11 +3,11 @@ package org.example
 import java.util.*
 
 class HashQueue<T> : Queue<T> {
-    private val set = HashSet<Int>()
+    private val set = HashSet<T>()
     private val queue = LinkedList<T>()
 
     override fun add(element: T): Boolean {
-        return if (set.add(element.hashCode())) {
+        return if (set.add(element)) {
             queue.add(element)
             true
         } else {
@@ -34,11 +34,11 @@ class HashQueue<T> : Queue<T> {
         get() = queue.size
 
     override fun contains(element: T): Boolean {
-        return set.contains(element.hashCode())
+        return set.contains(element)
     }
 
     override fun addAll(elements: Collection<T>): Boolean {
-        val newElements = elements.filter { set.add(it.hashCode()) }
+        val newElements = elements.filter { set.add(it) }
         return queue.addAll(newElements)
     }
 
@@ -56,7 +56,7 @@ class HashQueue<T> : Queue<T> {
     }
 
     override fun containsAll(elements: Collection<T>): Boolean {
-        return set.containsAll(elements.map { it.hashCode() }.toSet())
+        return set.containsAll(elements)
     }
 
     override fun retainAll(elements: Collection<T>): Boolean {
