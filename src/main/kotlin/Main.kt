@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
     println("Computing group size...")
     println("Group size: ${SchreierSimsAlgorithm(rubiksCube.generators).size}")
 
-    println("Computing subgroup that permute: ${args[1]}")
+    println("Computing subgroup that permutes: ${args[1]}")
     val stabilizers = args[1].split(",")
         .map { it.toInt() }
         .let(rubiksCube::stabilizersThatPermute)

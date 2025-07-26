@@ -60,7 +60,7 @@ Run the algorithm with cube face generators and target permutation:
 Using Generators: F,R,U
 Computing group size...
 Group size: 170659735142400
-Computing subgroup that permute: 3,16,25,5,28,8,30,35
+Computing subgroup that permutes: 3,16,25,5,28,8,30,35
 Computing subgroup size...
 Subgroup size: 3
 Computing all solutions for permutations in subgroup.
