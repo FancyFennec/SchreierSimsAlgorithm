@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
     println("Using Generators: ${args[0]}")
     val rubiksCube = RubiksCube.Builder()
         .let { if (args[0].contains("F")) it.withF() else it }
-        .let { if (args[1].contains("B")) it.withB() else it }
+        .let { if (args[0].contains("B")) it.withB() else it }
         .let { if (args[0].contains("U")) it.withU() else it }
         .let { if (args[0].contains("D")) it.withD() else it }
         .let { if (args[0].contains("L")) it.withL() else it }

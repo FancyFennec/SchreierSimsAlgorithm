@@ -26,9 +26,10 @@ class SchreierSimsAlgorithm(private val generators: List<Permutation>, private v
     private fun computeSchreierVector(): Map<Int, Permutation> {
         val result = mutableMapOf(stabilizerPoint to E)
         val queue: Queue<Int> = LinkedList(listOf(stabilizerPoint))
+        val generatorsAndInverses = generators.flatMap { g -> listOf(g, g.inv) }
         while (queue.isNotEmpty()) {
             val current = queue.poll()!!
-            generators.flatMap { g -> listOf(g, g.inv) }.forEach { g ->
+            generatorsAndInverses.forEach { g ->
                 val key = g * current
                 if (key !in result) {
                     result[key] = g * result.getOrElse(current) { E }
@@ -62,7 +63,7 @@ class SchreierSimsAlgorithm(private val generators: List<Permutation>, private v
     private fun applySimsFilter(generators: List<Permutation>): List<Permutation> {
         val queue: Queue<Permutation> = LinkedList()
         queue.addAll(generators)
-        val result = mutableMapOf<String, Permutation>()
+        val result = mutableMapOf<Long, Permutation>()
         while (queue.isNotEmpty()) {
             val current = queue.poll()!!
             if (current.isIdentity) {
@@ -75,14 +76,14 @@ class SchreierSimsAlgorithm(private val generators: List<Permutation>, private v
                 queue.add(current.inv * result[key]!!)
             }
         }
-        return result.values.distinct()
+        return result.values.toList()
     }
 
-    private fun getSimsKey(p: Permutation): String {
-        if (p.keys.isEmpty()) return ""
-        val i = p.keys.min()
-        val j = p * i
-        return "$i,$j"
+    private fun getSimsKey(p: Permutation): Long {
+        val k = p.keys
+        if (k.isEmpty()) return -1L
+        val i = k.min()
+        return i.toLong() shl 32 or (p * i).toLong()
     }
 
 }

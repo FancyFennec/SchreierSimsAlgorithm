@@ -20,10 +20,11 @@ class Permutation {
         val E = Permutation("")
     }
 
-    val keys: List<Int>
-        get() = this.permutation.filter { k -> k != permutation[k.toInt()] }
+    val keys: List<Int> by lazy {
+        this.permutation.filter { k -> k != permutation[k.toInt()] }
             .map { k -> (k + 1U).toInt() }
             .sorted()
+    }
 
     private fun initialize(permutationString: String): UByteArray {
         require(permutationRegex.matches(permutationString)) { "permutation string incorrect: $permutationString" }
@@ -55,12 +56,11 @@ class Permutation {
         return times(other.inv)
     }
 
-    val inv: Permutation
-        get() {
-            val result = UByteArray(48) { i -> i.toUByte() }
-            permutation.forEachIndexed { index, i -> result[i.toInt()] = index.toUByte() }
-            return Permutation(result)
-        }
+    val inv: Permutation by lazy {
+        val result = UByteArray(48) { i -> i.toUByte() }
+        permutation.forEachIndexed { index, i -> result[i.toInt()] = index.toUByte() }
+        Permutation(result)
+    }
 
     val isIdentity: Boolean get() = equals(E)
 
